@@ -8,13 +8,13 @@ namespace Dfc.ProviderPortal.Lars.Functions.FindAndExtract
 {
     public static class FindAndExtractTrigger
     {
-        [FunctionName("FindAndExtractTrigger")]
-        public static void Run(
-            [TimerTrigger("0 */1 * * * *")]TimerInfo myTimer,
-            ILogger log,
-            [Inject] IOptions<FindAndExtractSettings> settings)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now} {settings.Value.Sample}");
-        }
+        //[FunctionName("FindAndExtractTrigger")]
+        //public static void Run(
+        //    [TimerTrigger("0 */1 * * * *")]TimerInfo myTimer,
+        //    ILogger log,
+        //    [Inject] IOptions<FindAndExtractSettings> settings)
+        //{
+        //    log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now} {settings.Value.Sample}");
+        //}
     }
 }

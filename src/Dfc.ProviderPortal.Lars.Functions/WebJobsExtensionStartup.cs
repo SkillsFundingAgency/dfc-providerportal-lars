@@ -1,6 +1,7 @@
 ﻿using Dfc.ProviderPortal.Lars.Common.DependencyInjection;
 using Dfc.ProviderPortal.Lars.Functions;
 using Dfc.ProviderPortal.Lars.Functions.FindAndExtract;
+using Dfc.ProviderPortal.Lars.Functions.ImportCsv;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace Dfc.ProviderPortal.Lars.Functions
 
             builder.Services.AddSingleton<IConfiguration>(configuration);
             builder.Services.Configure<FindAndExtractSettings>(configuration.GetSection(nameof(FindAndExtractSettings)));
+            builder.Services.Configure<LarsCosmosDbCollectionSettings>(configuration.GetSection(nameof(LarsCosmosDbCollectionSettings)));
         }
     }
 }
