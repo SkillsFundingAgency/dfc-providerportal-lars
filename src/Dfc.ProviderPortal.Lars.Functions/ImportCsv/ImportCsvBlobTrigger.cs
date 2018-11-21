@@ -23,36 +23,33 @@ namespace Dfc.ProviderPortal.Lars.Functions.ImportCsv
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
 
-            await CreateDatabaseIfNotExistsAsync(settings.Value);
-            await CreateOrRecreateDocumentCollectionAsync(settings.Value, name);
-        }
-
-        internal static async Task CreateDatabaseIfNotExistsAsync(LarsCosmosDbCollectionSettings settings)
-        {
-            using (var client = new DocumentClient(new Uri(settings.EndpointUri), settings.PrimaryKey))
+            using (var client = new DocumentClient(new Uri(settings.Value.EndpointUri), settings.Value.PrimaryKey))
             {
-                await client.CreateDatabaseIfNotExistsAsync(new Database { Id = settings.DatabaseId });
+                await CreateDatabaseIfNotExistsAsync(settings.Value, client);
+                await CreateOrRecreateDocumentCollectionAsync(settings.Value, client, name);
             }
         }
 
-        internal static async Task CreateOrRecreateDocumentCollectionAsync(LarsCosmosDbCollectionSettings settings, string fileName)
+        internal static async Task CreateDatabaseIfNotExistsAsync(LarsCosmosDbCollectionSettings settings, DocumentClient client)
+        {
+            await client.CreateDatabaseIfNotExistsAsync(new Database { Id = settings.DatabaseId });
+        }
+
+        internal static async Task CreateOrRecreateDocumentCollectionAsync(LarsCosmosDbCollectionSettings settings, DocumentClient client, string fileName)
         {
             if (TryGetCollectionId(settings, fileName, out string collectionId))
             {
-                using (var client = new DocumentClient(new Uri(settings.EndpointUri), settings.PrimaryKey))
+                var collection = client
+                    .CreateDocumentCollectionQuery(UriFactory.CreateDatabaseUri(settings.DatabaseId))
+                    .ToArray()
+                    .FirstOrDefault(c => c.Id == collectionId);
+
+                if (collection != null)
                 {
-                    var collection = client
-                        .CreateDocumentCollectionQuery(UriFactory.CreateDatabaseUri(settings.DatabaseId))
-                        .ToArray()
-                        .FirstOrDefault(c => c.Id == collectionId);
-
-                    if (collection != null)
-                    {
-                        var deleteResponse = await client.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(settings.DatabaseId, collectionId));
-                    }
-
-                    var createResponse = await client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(settings.DatabaseId), new DocumentCollection { Id = collectionId });
+                    await client.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(settings.DatabaseId, collectionId));
                 }
+
+                await client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(settings.DatabaseId), new DocumentCollection { Id = collectionId });
             }
         }
 
@@ -64,8 +61,8 @@ namespace Dfc.ProviderPortal.Lars.Functions.ImportCsv
             if (fileName == settings.CollectionSettings.LearningDelivery.FileName) collectionId = settings.CollectionSettings.LearningDelivery.CollectionId;
             if (fileName == settings.CollectionSettings.LearningDeliveryCategory.FileName) collectionId = settings.CollectionSettings.LearningDeliveryCategory.CollectionId;
             if (fileName == settings.CollectionSettings.AwardOrgCode.FileName) collectionId = settings.CollectionSettings.AwardOrgCode.CollectionId;
-            if (fileName == settings.CollectionSettings.SubjectSectorTier1.FileName) collectionId = settings.CollectionSettings.SubjectSectorTier1.CollectionId;
-            if (fileName == settings.CollectionSettings.SubjectSectorTier2.FileName) collectionId = settings.CollectionSettings.SubjectSectorTier2.CollectionId;
+            if (fileName == settings.CollectionSettings.SectorSubjectAreaTier1.FileName) collectionId = settings.CollectionSettings.SectorSubjectAreaTier1.CollectionId;
+            if (fileName == settings.CollectionSettings.SectorSubjectAreaTier2.FileName) collectionId = settings.CollectionSettings.SectorSubjectAreaTier2.CollectionId;
             if (fileName == settings.CollectionSettings.MINotionalNVQLevelv2.FileName) collectionId = settings.CollectionSettings.MINotionalNVQLevelv2.CollectionId;
 
             return !string.IsNullOrEmpty(collectionId);
