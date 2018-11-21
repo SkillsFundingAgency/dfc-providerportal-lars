@@ -15,8 +15,9 @@ namespace Dfc.ProviderPortal.Lars.Common.Files.Delimited
 
             try
             {
-                var number = settings.IsFirstRowHeaders ? -1 : 0;
-                while (reader.Peek() > -1) yield return ReadLine(number++, reader.ReadLine(), settings);
+                var number = 0;
+                while (reader.Peek() > -1)
+                    yield return ReadLine(++number, reader.ReadLine(), settings);
             }
             finally
             {
@@ -39,7 +40,7 @@ namespace Dfc.ProviderPortal.Lars.Common.Files.Delimited
 
         internal static IDelimitedLine ReadLine(int number, string line, IDelimitedFileSettings settings)
         {
-            Throw.IfLessThan(0, number, nameof(number));
+            Throw.IfLessThan(1, number, nameof(number));
             Throw.IfNull(settings, nameof(settings));
 
             var fields = new List<IDelimitedField>();
