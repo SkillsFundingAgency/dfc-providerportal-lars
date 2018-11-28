@@ -26,10 +26,16 @@
         "description": "Connection string for the storage account to store function app "
       }
     },
-    "cosmosDBName": {
+    "cosmosDBfqdn": {
       "type": "string",
       "metadata": {
-        "description": "Cosmos DB account name in the format "
+        "description": "Cosmos DB account name in the format https://dfc-xxx-xxx-cdb.documents.azure.com/"
+      }
+    },
+    "cosmosDBDatabase": {
+      "type": "string",
+      "metadata": {
+        "description": "Cosmos DB database name"
       }
     },
     "cosmosDBKey": {
@@ -103,7 +109,7 @@
               },
               {
                 "name": "LarsCosmosDbCollectionSettings__EndpointUri",
-                "value": "[concat('https://',parameters('cosmosDBName'),'.documents.azure.com:443/')]"
+                "value": "[parameters('cosmosDBfqdn')]"
               },
               {
                 "name": "LarsCosmosDbCollectionSettings__PrimaryKey",
@@ -111,7 +117,7 @@
               },
               {
                 "name": "LarsCosmosDbCollectionSettings__DatabaseId",
-                "value": "[parameters('cosmosDBName')]"
+                "value": "[parameters('cosmosDBDatabase')]"
               },
               {
                 "name": "LarsCosmosDbCollectionSettings__CollectionSettings__Category__FileName",

@@ -13,6 +13,15 @@
     },
     "storageConnectionString": {
       "value": "DefaultEndpointsProtocol=https;AccountName=dfcfooprovstr;AccountKey=this_is_not_a_real_account==;EndpointSuffix=core.windows.net"
+    },
+    "cosmosDBfqdn": {
+      "value": "https://dfc-foo-prov-cdb.documents.azure.com:443/"
+    },
+    "cosmosDBDatabase": {
+      "value": "bar"
+    },
+    "cosmosDBKey": {
+      "value": "this_is_not_a_real_key"
     }
   }
 }
