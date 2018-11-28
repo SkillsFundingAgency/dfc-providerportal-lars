@@ -25,6 +25,18 @@
       "metadata": {
         "description": "Connection string for the storage account to store function app "
       }
+    },
+    "cosmosDBName": {
+      "type": "string",
+      "metadata": {
+        "description": "Cosmos DB account name in the format "
+      }
+    },
+    "cosmosDBKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Cosmos DB access key"
+      }
     }
   },
   "variables": {
@@ -88,6 +100,74 @@
               {
                 "name": "AzureWebJobsStorage",
                 "value": "[parameters('storageConnectionString')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__EndpointUri",
+                "value": "[concat('https://',parameters('cosmosDBName'),'.documents.azure.com:443/')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__PrimaryKey",
+                "value": "[parameters('cosmosDBKey')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__DatabaseId",
+                "value": "[parameters('cosmosDBName')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__Category__FileName",
+                "value": "Category.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__Category__CollectionId",
+                "value": "category_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDelivery__FileName",
+                "value": "LearningDelivery.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDelivery__CollectionId",
+                "value": "learningdelivery_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDeliveryCategory__FileName",
+                "value": "LearningDeliveryCategory.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDeliveryCategory__CollectionId",
+                "value": "learningdeliverycategory_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__AwardOrgCode__FileName",
+                "value": "AwardOrgCode.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__AwardOrgCode__CollectionId",
+                "value": "awardorgcode_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier1__FileName",
+                "value": "SectorSubjectAreaTier1.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier1__CollectionId",
+                "value": "sectorsubjectareatier1_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier2__FileName",
+                "value": "SectorSubjectAreaTier2.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier2__CollectionId",
+                "value": "sectorsubjectareatier2_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__MINotionalNVQLevelv2__FileName",
+                "value": "MI_NotionalNVQLevelv2.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__MINotionalNVQLevelv2__CollectionId",
+                "value": "mi_notionalnvqlevelv2_csv"
               }
             ]
           }
