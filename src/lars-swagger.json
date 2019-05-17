@@ -1,0 +1,230 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "LARS search API"
+  },
+  "paths": {
+    "/lars": {
+      "post": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "criteria",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/LarsSearchCriteria"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/LarsSearchResult"
+            }
+          }
+        }
+      }
+    },
+  },
+  "definitions": {
+    "LarsSearchCriteria": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "string"
+        },
+        "top": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "skip": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "count": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "filter": {
+          "type": "string"
+        },
+        "facets": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "LarsSearchResult": {
+      "type": "object",
+      "properties": {
+        "@odata.context": {
+          "type": "string"
+        },
+        "@odata.count": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "@search.facets": {
+          "$ref": "#/definitions/LarsSearchFacets"
+        },
+        "value": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LarsSearchResultItem"
+          }
+        }
+      }
+    },
+    "LarsSearchFacets": {
+      "type": "object",
+      "properties": {
+        "awardOrgCode": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchFacet"
+          }
+        },
+        "AwardOrgCode@odata.type": {
+          "type": "string"
+        },
+        "notionalNVQLevelv2": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchFacet"
+          }
+        },
+        "NotionalNVQLevelv2@odata.type": {
+          "type": "string"
+        },
+        "sectorSubjectAreaTier1": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchFacet"
+          }
+        },
+        "SectorSubjectAreaTier1@odata.type": {
+          "type": "string"
+        },
+        "sectorSubjectAreaTier2": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchFacet"
+          }
+        },
+        "SectorSubjectAreaTier2@odata.type": {
+          "type": "string"
+        },
+        "awardOrgAimRef": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchFacet"
+          }
+        },
+        "AwardOrgAimRef@odata.type": {
+          "type": "string"
+        }
+      }
+    },
+    "LarsSearchResultItem": {
+      "type": "object",
+      "properties": {
+        "@search.score": {
+          "format": "double",
+          "type": "number"
+        },
+        "learnAimRef": {
+          "type": "string"
+        },
+        "learnAimRefTitle": {
+          "type": "string"
+        },
+        "notionalNVQLevelv2": {
+          "type": "string"
+        },
+        "awardOrgCode": {
+          "type": "string"
+        },
+        "learnDirectClassSystemCode1": {
+          "type": "string"
+        },
+        "learnDirectClassSystemCode2": {
+          "type": "string"
+        },
+        "guidedLearningHours": {
+          "type": "string"
+        },
+        "totalQualificationTime": {
+          "type": "string"
+        },
+        "unitType": {
+          "type": "string"
+        },
+        "awardOrgName": {
+          "type": "string"
+        },
+        "learnAimRefTypeDesc": {
+          "type": "string"
+        },
+        "certificationEndDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "sectorSubjectAreaTier1Desc": {
+          "type": "string"
+        },
+        "sectorSubjectAreaTier2Desc": {
+          "type": "string"
+        },
+        "awardOrgAimRef": {
+          "type": "string"
+        }
+      }
+    },
+    "SearchFacet": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
