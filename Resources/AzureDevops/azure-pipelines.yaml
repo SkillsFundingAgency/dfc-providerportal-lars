@@ -65,9 +65,8 @@ steps:
   inputs:
     command: publish
     projects: 'src/${{ variables.SolutionBaseName }}/${{ variables.SolutionBaseName }}.csproj'
-    configuration: ${{ variables.buildConfiguration }}
-    arguments: '--output $(Build.ArtifactStagingDirectory)'
-    publishWebProjects: false
+    arguments: '--output $(Build.ArtifactStagingDirectory) --configuration ${{ variables.buildConfiguration }}'
+    publishWebProjects: true
     zipAfterPublish: true
 
 - task: CopyFiles@2
