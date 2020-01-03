@@ -72,10 +72,11 @@ steps:
     zipAfterPublish: true
 
 - task: CopyFiles@2
-  displayName: 'Copy Azure folder to Staging'
+  displayName: 'Copy AzureSearch folder to Staging'
   inputs:
-    SourceFolder: $(System.DefaultWorkingDirectory)\Resources\ArmTemplates
-    TargetFolder: $(build.artifactstagingdirectory)\Azure\Azure
+    SourceFolder: $(System.DefaultWorkingDirectory)\Resources\AzureSearch
+    TargetFolder: $(build.artifactstagingdirectory)\Azure\AzureSearch
+
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact
