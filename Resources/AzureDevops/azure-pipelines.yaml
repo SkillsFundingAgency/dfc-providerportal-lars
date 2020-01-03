@@ -6,7 +6,7 @@ pool:
 variables:
   BuildPlatform: 'any cpu'
   BuildConfiguration: 'release'
-  SolutionBaseName: 'Dfc.ProviderPortal.Lars.Common'
+  SolutionBaseName: 'Dfc.ProviderPortal.Lars'
 
 resources:
   repositories:
@@ -47,7 +47,9 @@ steps:
   displayName: dotnet build
   inputs:
     command: build
-    projects: '**/*.csproj'
+    projects: |
+      src/**/*.csproj
+      tests/**/*.csproj
     arguments: '--configuration ${{ variables.buildConfiguration }}'
 
 # test
@@ -56,7 +58,7 @@ steps:
   continueOnError: true
   inputs:
     command: test
-    projects: 'tests/${{ variables.SolutionBaseName }}.Tests/${{ variables.SolutionBaseName }}.Tests/*.csproj'
+    projects: 'tests/${{ variables.SolutionBaseName }}.Common.Tests/${{ variables.SolutionBaseName }}.Common.Tests.csproj'
     arguments: '--configuration ${{ variables.buildConfiguration }}'
 
 # publish
@@ -64,9 +66,9 @@ steps:
   displayName: dotnet publish
   inputs:
     command: publish
-    projects: 'src/${{ variables.SolutionBaseName }}/${{ variables.SolutionBaseName }}.csproj'
+    projects: 'src/${{ variables.SolutionBaseName }}.Functions/${{ variables.SolutionBaseName }}.Functions.csproj'
     arguments: '--output $(Build.ArtifactStagingDirectory) --configuration ${{ variables.buildConfiguration }}'
-    publishWebProjects: true
+    publishWebProjects: false
     zipAfterPublish: true
 
 - task: CopyFiles@2
