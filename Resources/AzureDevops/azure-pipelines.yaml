@@ -58,7 +58,7 @@ steps:
   continueOnError: true
   inputs:
     command: test
-    projects: 'tests/${{ variables.SolutionBaseName }}.Common.Tests/${{ variables.SolutionBaseName }}.Common.Tests.csproj'
+    projects: 'tests/**/*.csproj'
     arguments: '--configuration ${{ variables.buildConfiguration }}'
 
 # publish
