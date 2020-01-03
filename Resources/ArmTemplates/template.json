@@ -1,0 +1,214 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionAppPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for the function app resources, in the form dfc-env-proj-fnapp"
+      }
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "App service plan to run the function app under"
+      }
+    },
+    "appServicePlanResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group the app service plan is in"
+      }
+    },
+    "storageConnectionString": {
+      "type": "string",
+      "metadata": {
+        "description": "Connection string for the storage account to store function app files"
+      }
+    },
+    "cosmosDBfqdn": {
+      "type": "string",
+      "metadata": {
+        "description": "Cosmos DB account name in the format https://dfc-xxx-xxx-cdb.documents.azure.com/ for app settings"
+      }
+    },
+    "cosmosDBkey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Cosmos DB access key for app settings"
+      }
+    },
+    "cosmosDBdatabase": {
+      "type": "string",
+      "metadata": {
+        "description": "Cosmos DB database name for app settings"
+      }
+    },
+    "cosmosDBcollection": {
+      "type": "string",
+      "metadata": {
+        "description": "Cosmos DB collection name for app settings"
+      }
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+    "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa')]",
+    "appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
+  },
+  "resources": [{
+      "apiVersion": "2017-05-10",
+      "name": "pplarsAppInsights",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('appInsightName')]"
+          },
+          "attachedService": {
+            "value": "[variables('functionAppName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "pplarsAppService",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": [
+        "pplarsAppInsights"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[variables('functionAppName')]"
+          },
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "appServicePlanResourceGroup": {
+            "value": "[parameters('appServicePlanResourceGroup')]"
+          },
+          "appServiceType": {
+            "value": "functionapp"
+          },
+          "appServiceAppSettings": {
+            "value": [
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference('pplarsAppInsights').outputs.InstrumentationKey.value]"
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~2"
+              },
+              {
+                "name": "AzureWebJobsStorage",
+                "value": "[parameters('storageConnectionString')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__EndpointUri",
+                "value": "[parameters('cosmosDBfqdn')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__PrimaryKey",
+                "value": "[parameters('cosmosDBKey')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__DatabaseId",
+                "value": "[parameters('cosmosDBDatabase')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__Collection",
+                "value": "[parameters('cosmosDBcollection')]"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__Category__FileName",
+                "value": "Category.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__Category__CollectionId",
+                "value": "category_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDelivery__FileName",
+                "value": "LearningDelivery.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDelivery__CollectionId",
+                "value": "learningdelivery_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDeliveryCategory__FileName",
+                "value": "LearningDeliveryCategory.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__LearningDeliveryCategory__CollectionId",
+                "value": "learningdeliverycategory_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__AwardOrgCode__FileName",
+                "value": "AwardOrgCode.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__AwardOrgCode__CollectionId",
+                "value": "awardorgcode_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier1__FileName",
+                "value": "SectorSubjectAreaTier1.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier1__CollectionId",
+                "value": "sectorsubjectareatier1_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier2__FileName",
+                "value": "SectorSubjectAreaTier2.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__SectorSubjectAreaTier2__CollectionId",
+                "value": "sectorsubjectareatier2_csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__MINotionalNVQLevelv2__FileName",
+                "value": "MI_NotionalNVQLevelv2.csv"
+              },
+              {
+                "name": "LarsCosmosDbCollectionSettings__CollectionSettings__MINotionalNVQLevelv2__CollectionId",
+                "value": "mi_notionalnvqlevelv2_csv"
+              }
+            ]
+          },
+          "deployStagingSlot": {
+            "value": false
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "functionAppName": {
+      "type": "string",
+      "value": "[variables('functionAppName')]"
+    },
+    "appInsightName": {
+      "type": "string",
+      "value": "[variables('appInsightName')]"
+    },
+    "appInsightInstrumentationKey": {
+      "type": "string",
+      "value": "[reference('pplarsAppInsights').outputs.InstrumentationKey.value]"
+    }
+  }
+}
