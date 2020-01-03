@@ -48,7 +48,7 @@ steps:
   inputs:
     command: build
     projects: '**/*.csproj'
-    configuration: ${{ variables.buildConfiguration }}
+    arguments: '--configuration ${{ variables.buildConfiguration }}'
 
 # test
 - task: DotNetCoreCLI@2
@@ -57,7 +57,7 @@ steps:
   inputs:
     command: test
     projects: 'tests/${{ variables.SolutionBaseName }}.Tests/${{ variables.SolutionBaseName }}.Tests/*.csproj'
-    configuration: ${{ variables.buildConfiguration }}
+    arguments: '--configuration ${{ variables.buildConfiguration }}'
 
 # publish
 - task: DotNetCoreCLI@2
