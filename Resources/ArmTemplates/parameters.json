@@ -25,6 +25,9 @@
     },
     "cosmosDBcollection": {
       "value": "__cosmosDBcollection__"
+    },
+    "providerPortalApplicationInsights": {
+      "value": "__providerportalApplicationInsights__"
     }
   }
 }
