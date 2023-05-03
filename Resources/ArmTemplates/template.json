@@ -70,10 +70,7 @@
     {
       "apiVersion": "2017-05-10",
       "name": "pplarsAppService",
-      "type": "Microsoft.Resources/deployments",
-      "dependsOn": [
-        "pplarsAppInsights"
-      ],
+      "type": "Microsoft.Resources/deployments",      
       "properties": {
         "mode": "Incremental",
         "templateLink": {
