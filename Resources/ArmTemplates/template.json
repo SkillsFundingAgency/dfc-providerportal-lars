@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "appInsightsInstrumentationKey":{
+      "type": "string"
+    },
     "functionAppPrefix": {
       "type": "string",
       "metadata": {
@@ -18,6 +21,12 @@
       "type": "string",
       "metadata": {
         "description": "Resource group the app service plan is in"
+      }
+    },
+     "providerPortalApplicationInsights": {
+      "type": "string",
+      "metadata": {
+        "description": "Application Insights Reference for Course Directory i.e. dfc-<env>-prov-as-ai"
       }
     },
     "storageConnectionString": {
@@ -54,35 +63,14 @@
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
     "functionAppName": "[concat(parameters('functionAppPrefix'),'-fa')]",
-    "appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
+    "FunctionAppInsightInstrumentationKey":"[parameters('appInsightsInstrumentationKey')]"
+    //"appInsightName": "[concat(parameters('functionAppPrefix'),'-ai')]"
   },
-  "resources": [{
-      "apiVersion": "2017-05-10",
-      "name": "pplarsAppInsights",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "appInsightsName": {
-            "value": "[variables('appInsightName')]"
-          },
-          "attachedService": {
-            "value": "[variables('functionAppName')]"
-          }
-        }
-      }
-    },
+  "resources": [
     {
       "apiVersion": "2017-05-10",
       "name": "pplarsAppService",
-      "type": "Microsoft.Resources/deployments",
-      "dependsOn": [
-        "pplarsAppInsights"
-      ],
+      "type": "Microsoft.Resources/deployments",      
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -106,7 +94,7 @@
             "value": [
               {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                "value": "[reference('pplarsAppInsights').outputs.InstrumentationKey.value]"
+                "value": "[variables('FunctionAppInsightInstrumentationKey')]"
               },
               {
                 "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -204,11 +192,11 @@
     },
     "appInsightName": {
       "type": "string",
-      "value": "[variables('appInsightName')]"
+      "value": "[parameters('providerPortalApplicationInsights')]"
     },
     "appInsightInstrumentationKey": {
       "type": "string",
-      "value": "[reference('pplarsAppInsights').outputs.InstrumentationKey.value]"
+      "value": "[variables('FunctionAppInsightInstrumentationKey')]"
     }
   }
 }

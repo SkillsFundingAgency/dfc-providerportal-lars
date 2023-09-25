@@ -25,6 +25,12 @@
     },
     "cosmosDBcollection": {
       "value": "__cosmosDBcollection__"
-    }
+    },
+    "providerPortalApplicationInsights": {
+      "value": "__providerportalApplicationInsights__"
+    },
+    "appInsightsInstrumentationKey": {
+      "value": "__appInsightsInstrumentationKey__" 
+  }
   }
 }
