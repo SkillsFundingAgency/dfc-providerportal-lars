@@ -16,6 +16,12 @@
     },
     "providerPortalApplicationInsights":{
       "value": "dfc-dev-prov-as-ai"
+    },
+    "workspaceName": {
+      "value": "aTestLogAnalyticsAccount"
+    },
+    "workspaceResourceGroup": {
+      "value": "aResourceGroup"
     }
   }
 }
